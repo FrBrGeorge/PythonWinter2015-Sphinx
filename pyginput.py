@@ -204,7 +204,7 @@ class Input:
         :return: ``False`` if no activation was needed, ``True`` otherwise.
 
         Calling :py:meth:`._update` means resetting every field,
-        so use `inputbox.activate("*any prompt*")' to replace
+        so use :py:meth:`.activate("*any prompt*")` to replace
         last entered value with the default one.
         '''
         if self.Status&ACTIVE and not pargs and not nargs:
