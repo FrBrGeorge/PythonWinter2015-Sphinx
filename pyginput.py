@@ -42,31 +42,51 @@ ACTIVE,DONE,FAILED,CANCEL,SHOWN,FIRST=(1<<i for i in xrange(6))
 class Input:
     '''
     Interactive text box providing typed input
+
     '''
-    # Default values for some properties
+    #: Non-drawable area
     BorderWidth=3
-    Status=0
+    #: Cursor line width
     CursorWidth=2
     Margin=0
+    #: Input text color
     TextColor=pygame.Color("Black")
+    #: Prompt text color
     PromptColor=pygame.Color("grey50")
+    #: Cursor line color
     CursorColor=pygame.Color("grey75")
+    #: Sawtooth color
     OverColor=pygame.Color("tomato")
+    #: Background color
     PaperColor=pygame.Color("ivory")
+    #: Default prompt
     Prompt=u""
+    #: Default text
     DefaultText=u""
-    SetType=unicode
+    #: Whether not to exit if incorract value entered
     RetryIncorrect=True
+    #: Default text length (in letters)
     TextLength=8
+    #: Font (by ID, do not mix with ``Font``)
     FontID=None
+    #: Font object
     Font=None
+    #: Default font size
     FontSize=24
+    #: Space between prompt and input part of box
     PromptGap=None
+    #: Box size
     Size=None
+    #: Wheter not to resize box according to string length
     FixedSize=False
     BackingStore=None
     RepeatStore=None
+    #: Default value of :py:func:`pygame.key.set_repeat` 
     RepeatDefault=(500,100)
+    Status=0
+
+    #: Type conversion function
+    SetType=unicode
 
     def _update(self, *pargs, **nargs):
         '''Update box properties
