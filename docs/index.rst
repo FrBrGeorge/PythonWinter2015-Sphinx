@@ -15,6 +15,7 @@ PygInput API
 ============
 .. automodule:: pyginput
    :members:
+   :private-members:
 
 
 Indices and tables

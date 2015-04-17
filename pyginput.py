@@ -68,9 +68,12 @@ class Input:
     RepeatStore=None
     RepeatDefault=(500,100)
 
-    def __update__(self, *pargs, **nargs):
-        '''Update box properties.
-        Positional parameters: [Prompt, [DefaultText]].
+    def _update(self, *pargs, **nargs):
+        '''Update box properties
+
+        :param str Prompt: Prompt string
+        :param str DefaultText: Default value
+
         Named parameters: all class data fields.
 
         - Size supercedes FontSize, default FontSize is 24
@@ -109,10 +112,10 @@ class Input:
         self.Cursor=len(self.Text)
 
     def __init__(self, *pargs, **nargs):
-        '''Create a text input entity. Call __update__() next.'''
-        self.__update__(*pargs, **nargs)
+        '''Create a text input entity. Call :py:meth:`_update` next.'''
+        self._update(*pargs, **nargs)
 
-    def __sawtoothed__(self, block, side, mult=3):
+    def _sawtoothed(self, block, side, mult=3):
         '''Create a sawtoothed mark for left (False) or right (True) side
 
         :param rect block: Rectangle to scale sawtooth on
@@ -153,9 +156,9 @@ class Input:
         ia.blit(pr,(Offset,(ia.get_height()-pr.get_height())/2))
         pygame.draw.line(ia, self.CursorColor, (w+Offset,2), (w+Offset,ia.get_height()-2),self.CursorWidth)
         if Offset<0:
-            pygame.draw.polygon(ib, self.OverColor, self.__sawtoothed__(ib, False))
+            pygame.draw.polygon(ib, self.OverColor, self._sawtoothed(ib, False))
         if Offset+pr.get_width()>ia.get_width()-self.CursorWidth:
-            pygame.draw.polygon(ib, self.OverColor, self.__sawtoothed__(ib, True))
+            pygame.draw.polygon(ib, self.OverColor, self._sawtoothed(ib, True))
         return ret
 
     def draw(self,scr,pos):
@@ -176,18 +179,18 @@ class Input:
     def activate(self, *pargs, **nargs):
         '''Enable input from the box.
 
-        If either pargs or nargs is given, call :py:meth:`.__update__`.
+        If either pargs or nargs is given, call :py:meth:`._update`.
 
         :return: ``False`` if no activation was needed, ``True`` otherwise.
 
-        Calling :py:meth:`.__update__` means resetting every field,
+        Calling :py:meth:`._update` means resetting every field,
         so use `inputbox.activate("*any prompt*")' to replace
         last entered value with the default one.
         '''
         if self.Status&ACTIVE and not pargs and not nargs:
             return False
         if pargs or nargs:
-            self.__update__(*pargs, **nargs)
+            self._update(*pargs, **nargs)
         self.Cursor=len(self.Text)
         self.Margin=0
         self.Status=ACTIVE|FIRST
