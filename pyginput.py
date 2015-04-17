@@ -4,6 +4,9 @@
 Simple input box for pygame
 
 Usage:
+
+.. code-block:: python    
+
     box=Input(…)                                    # declare an input box
     while <main loop>:
         …
@@ -24,9 +27,11 @@ Usage:
         if <input is needed>:                       # we need to input something in program
             box.activate(…)                         # store old state and turn on the box
         …
-        if box.is_active(): box.draw(surface,pos)   # show box after all surface changes
+        if box.is_active():
+            box.draw(surface,pos)                   # show box after all surface changes
         pygame.display.flip()                       # display the picture
-        if box.is_active(): box.undraw()            # hide box before further surface changes
+        if box.is_active():
+            box.undraw()                            # hide box before further surface changes
 '''
 
 import pygame
@@ -35,6 +40,9 @@ __VERSION__=0.06
 ACTIVE,DONE,FAILED,CANCEL,SHOWN,FIRST=(1<<i for i in xrange(6))
 
 class Input:
+    '''
+    Interactive text box providing typed input
+    '''
     # Default values for some properties
     BorderWidth=3
     Status=0
@@ -64,7 +72,7 @@ class Input:
         '''Update box properties.
         Positional parameters: [Prompt, [DefaultText]].
         Named parameters: all class data fields.
-        
+
         - Size supercedes FontSize, default FontSize is 24
         - setting DefaultText also sets SetType (so use 0., not "0" for float input)
         '''
@@ -105,7 +113,14 @@ class Input:
         self.__update__(*pargs, **nargs)
 
     def __sawtoothed__(self, block, side, mult=3):
-        '''Create a sawtoothed mark for left (False) or right (True) side'''
+        '''Create a sawtoothed mark for left (False) or right (True) side
+
+        :param rect block: Rectangle to scale sawtooth on
+        :param bool side: Choose left (``False``) or right (``True``) side
+        :param int mult: Tooth scale
+
+        :return: List of coordinates for :py:func:`pygame.draw.polygon()`
+        '''
         w,h=block.get_size()
         nw=mult*self.BorderWidth
         n=(h/nw)|1
@@ -160,11 +175,13 @@ class Input:
 
     def activate(self, *pargs, **nargs):
         '''Enable input from the box.
-        If either pargs or nargs is given, call __update__().
-        Return False if no activation was needed, True otherwise.
 
-        Calling __update__() means resetting every field,
-        so use `inputbox.activate("<any prompt>")' to replace
+        If either pargs or nargs is given, call :py:meth:`.__update__`.
+
+        :return: ``False`` if no activation was needed, ``True`` otherwise.
+
+        Calling :py:meth:`.__update__` means resetting every field,
+        so use `inputbox.activate("*any prompt*")' to replace
         last entered value with the default one.
         '''
         if self.Status&ACTIVE and not pargs and not nargs:
@@ -194,14 +211,20 @@ class Input:
         return self.is_done() and not (self.is_failed() or self.is_cancelled())
 
     def edit(self,ev):
-        '''Proceed event for editing input box.
+        '''
+        Proceed event for editing input box.
+
+        :param event ev: Event to parse
+
         Supported keys:
-            <any unicode symbol>:   input character
-            <Return>/<Enter>:       finish input
-            <Backspace>/<Del>:      delete character under/after the cursor
-            <Esc>:                  restore default value
-            <Home>/<End>/→/←:       move cursor
-            <Esc><Esc>:             cancel input'''
+
+        * ``any unicode symbol``:   input character
+        * ``Return``/``Enter``:     finish input
+        * ``Backspace``/``Del``:    delete character under/after the cursor
+        * ``Esc``:                  restore default value
+        * ``Home``/``End``/→/←:     move cursor
+        * ``Esc`` ``Esc``:          cancel input
+        '''
         if ev.type is pygame.KEYDOWN:
             if ev.key == pygame.K_BACKSPACE:
                 if self.Cursor>0:
@@ -243,7 +266,14 @@ class Input:
             self.Status&=~FIRST
 
     def input(self, scr, pos, *pargs, **nargs):
-        '''Perform synchronous input on surface scr at position pos.
+        '''
+        Perform synchronous input on surface scr at position pos.
+
+        :param surface scr: Surface to draw textbox
+        :param int,int pos: Top-left coordinates of textbox
+
+        All additional parameters are passed to :py:meth:`.activate` method.
+
         All unused events are ignored.'''
         self.activate(*pargs, **nargs)
         while not self.is_done():
@@ -255,7 +285,18 @@ class Input:
         return self.value()
 
 def Print(scr, text, pos=None, font=None, size=24, antialias=True, color=None, background=None):
-    '''Print text on surface screen using as many defaults as possible'''
+    ''' 
+    Print text on surface using as many defaults as possible
+
+    :param surface scr: Surface to print the string
+    :param str text: String to print
+    :param int,int pos: Top-left corner of output box (default is centered by src)
+    :param font font: Font to render
+    :param int size: Font size (default is 24)
+    :param bool antialias: Where to use antialiasing or not
+    :param color color: Text color (use background-contrast by default)
+    :param color background: Background color (transparent by default)
+    '''
     # TODO font is registered every time you print, fix this
     f=pygame.font.Font(font, size)
     if pos == None:
