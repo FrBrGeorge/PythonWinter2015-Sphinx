@@ -283,6 +283,7 @@ def __main():
     inp=Input("Input",Size=(Size[0]-2*x,Size[1]-2*y))
     cont,verbose=True,False
     defaults,defcnt=(("String",u""),("Int",0),("Float",0.)),0
+    print "Press ENTER to input, F1 to toggle verbosity, ESC to exit"
     while cont:
         pos=_(r,Size[0]-r),_(r,Size[1]-r)
         col=_(10,255),_(10,255),_(10,255)
@@ -298,6 +299,7 @@ def __main():
                 if ev.key in (pygame.K_KP_ENTER, pygame.K_RETURN, 13):
                     if not inp.is_active():
                         inp.activate(*defaults[defcnt])
+                        print "Input:",defaults[defcnt][0]
                         defcnt=(defcnt+1)%len(defaults)
                 elif ev.key == pygame.K_F1:
                     verbose=True
