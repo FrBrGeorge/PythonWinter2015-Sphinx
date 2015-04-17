@@ -11,6 +11,10 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
+PygInput API
+============
+.. automodule:: pyginput
+   :members:
 
 
 Indices and tables
